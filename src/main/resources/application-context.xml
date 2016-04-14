@@ -1,0 +1,39 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:hz="http://www.hazelcast.com/schema/spring"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-4.0.xsd
+        http://www.hazelcast.com/schema/spring
+        http://www.hazelcast.com/schema/spring/hazelcast-spring.xsd">
+
+    <hz:hazelcast id="instance" >
+        <hz:config>
+            <hz:network port="5701">
+                <hz:join>
+                    <hz:multicast enabled="true" />
+                </hz:join>
+            </hz:network>
+            <hz:map name="indexedDataMap" >
+                <!--<hz:map-store enabled="true" write-delay-seconds="0" implementation="mapLoader" initial-mode="EAGER"/>-->
+                <hz:indexes>
+                    <hz:index attribute="assetId" />
+                </hz:indexes>
+            </hz:map>
+            <hz:map name="dataMap" />
+        </hz:config>
+    </hz:hazelcast>
+
+    <hz:map instance-ref="instance" name="indexedDataMap" id="indexedDataMap" />
+    <hz:map instance-ref="instance" name="dataMap" id="dataMap" />
+
+    <bean id="cacheManager" class="com.hazelcast.spring.cache.HazelcastCacheManager">
+        <constructor-arg name="hazelcastInstance" ref="instance" />
+    </bean>
+
+    <bean id="mapLoader" class="com.example.DataMapStore" />
+
+</beans>
