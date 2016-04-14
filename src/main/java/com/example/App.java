@@ -24,8 +24,8 @@ import static com.example.TestUtil.ALPHA;
 public class App {
 
     public static final Logger LOGGER = Logger.getLogger(App.class);
-    private static final int BENCHMARK_INTERVAL = 2;
-    private static final int TEST_DATA_SIZE = 1000;
+    private static final int BENCHMARK_INTERVAL = 30;
+    private static final int TEST_DATA_SIZE = 1000000;
 
 
     public static void main(String[] args) {
